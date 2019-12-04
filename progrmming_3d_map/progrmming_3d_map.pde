@@ -1,4 +1,4 @@
-                                                                 //victoria
+//victoria                                                                 //victoria
 //nov 4
 
 
@@ -8,6 +8,7 @@ color white= #FFFFFF;
 PImage qblock;
 PImage map;
 
+int shottimer=0, threshold=30;
 
 PVector direction= new PVector (0, -10);
 //direction.setMag =10;
@@ -16,16 +17,19 @@ PVector dirlf= new PVector (10, 0);
 float rotx=PI/4, roty=PI/4;
 int blocksize=100;
 
-boolean up, down, left, right;
+boolean up, down, left, right, space;
 
 float lx=2500, ly= height/2-blocksize/2, lz=2500;
 float headangle;
+
+ArrayList <bullet> mybullet;
 
 void setup () {
   size (800, 600, P3D);
   qblock =loadImage ("question.jpg");
   map=loadImage ("map.png");
   textureMode (NORMAL);
+  mybullet= new ArrayList <bullet>(100); //# is to reserve space for bullets
 }
 
 void draw () {
@@ -53,6 +57,8 @@ void draw () {
  if (right) {
  lx=lx+dirlf.x;
  lz=lz+dirlf.y;
+ 
+
  }
   
 
@@ -63,10 +69,32 @@ void draw () {
 
   drawground();
   drawmap();
+  bul();
 
  // popMatrix();
   
   
+}
+
+void bul() {
+
+
+int i=0;
+while (i<mybullet.size() ) {
+bullet b= mybullet.get (i);
+b.show();
+b.act();
+
+i++;
+
+}
+
+shottimer++;
+if (space && shottimer>threshold) {
+mybullet.add (new bullet (lx,lz, direction.x, direction.y));
+shottimer=0;
+}
+
 }
 
 void drawmap() {
@@ -198,6 +226,7 @@ if (keyCode==UP) up=true;
 if (keyCode==DOWN) down=true;
 if (keyCode==LEFT) left=true;
 if (keyCode==RIGHT) right=true;
+if (key==' ') space=true;
 }
 
 void keyReleased () {
@@ -205,5 +234,5 @@ if (keyCode==UP) up=false;
 if (keyCode==DOWN) down=false;
 if (keyCode==LEFT) left=false;
 if (keyCode==RIGHT) right=false;
-
+if (key==' ') space=false;
 }
