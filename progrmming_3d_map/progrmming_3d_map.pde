@@ -17,12 +17,13 @@ PVector dirlf= new PVector (10, 0);
 float rotx=PI/4, roty=PI/4;
 int blocksize=100;
 
-boolean up, down, left, right, space;
+boolean up, down, left, right, fire;
 
 float lx=2500, ly= height/2-blocksize/2, lz=2500;
 float headangle;
 
 ArrayList <bullet> mybullet;
+ArrayList <rain> myrain;
 
 void setup () {
   size (800, 600, P3D);
@@ -30,6 +31,7 @@ void setup () {
   map=loadImage ("map.png");
   textureMode (NORMAL);
   mybullet= new ArrayList <bullet>(100); //# is to reserve space for bullets
+  myrain= new ArrayList <rain> (1000);
 }
 
 void draw () {
@@ -70,12 +72,31 @@ void draw () {
   drawground();
   drawmap();
   bul();
+  rai();
 
  // popMatrix();
   
   
 }
 
+void rai () {
+
+int j=0;
+while (j<myrain.size()) {
+rain r= myrain.get (j);
+r.show ();
+r.act ();
+j++;
+}
+int k=0;
+while (k <50){
+myrain.add (new rain (random (0, 5000), ly-1000, random (0,5000), 0));
+k++;
+}
+
+
+
+}
 void bul() {
 
 
@@ -89,8 +110,9 @@ i++;
 
 }
 
+
 shottimer++;
-if (space && shottimer>threshold) {
+if (fire && shottimer>threshold) {
 mybullet.add (new bullet (lx,lz, direction.x, direction.y));
 shottimer=0;
 }
@@ -221,12 +243,21 @@ void mouseDragged() {
  // roty= roty+ (pmouseX-mouseX) *0.01;
 }
 
+void mousePressed () {
+fire=true;
+
+}
+
+void mouseReleased () {
+fire=false;
+
+}
+
 void keyPressed (){
 if (keyCode==UP) up=true;
 if (keyCode==DOWN) down=true;
 if (keyCode==LEFT) left=true;
 if (keyCode==RIGHT) right=true;
-if (key==' ') space=true;
 }
 
 void keyReleased () {
@@ -234,5 +265,4 @@ if (keyCode==UP) up=false;
 if (keyCode==DOWN) down=false;
 if (keyCode==LEFT) left=false;
 if (keyCode==RIGHT) right=false;
-if (key==' ') space=false;
 }

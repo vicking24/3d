@@ -29,8 +29,8 @@ popMatrix();
 }
 
 void act () {
-pos.x=pos.x+ velocity.x;
-pos.z=pos.z+velocity.y;
+pos.x=pos.x+ velocity.x*2;
+pos.z=pos.z+velocity.y*2;
 
 timer--;
 if (timer==0) {
