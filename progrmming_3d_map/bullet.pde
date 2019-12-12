@@ -1,7 +1,7 @@
 class bullet {
 
   PVector pos, velocity;
-  int lives;
+int lives;
   int timer;
 
 
