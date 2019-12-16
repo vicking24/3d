@@ -1,4 +1,4 @@
-//victoria                                                                 //victoria
+//victoria
 //nov 4
 
 
@@ -49,6 +49,15 @@ void draw () {
   headangle=(pmouseX-mouseX) *0.01;
   dirlf= direction.copy();
   dirlf.rotate (PI/2);
+  
+  pushMatrix ();
+  rotateX (PI/2);
+  fill (0);
+  translate (2500, ly-50,2500);
+  ellipse (0,0,100, 100);
+  popMatrix ();
+  
+
 
   if (up) {
     lz=lz+direction.y;
@@ -76,11 +85,34 @@ void draw () {
   drawground();
   drawmap();
   bul();
-  rai();
-  sno();
+ // rai();
+ // sno();
   firewor();
+  tree();
 
   // popMatrix();
+}
+
+void tree () {
+pushMatrix();
+translate (500, 50, 500);
+fill (#583811);
+box (100);
+popMatrix();
+
+pushMatrix();
+fill (#583811);
+translate (500, -50, 500);
+box (100);
+popMatrix();
+
+pushMatrix();
+translate (500, -300, 500);
+fill (#1E761D);
+box (500);
+popMatrix();
+
+
 }
 
 void firewor() {
@@ -101,47 +133,47 @@ myfirework.remove(p);
   }
 }
 
-void sno () {
+//void sno () {
 
-  int m=0;
-  while (m<mysnow.size()) {
-    snow s= mysnow.get (m);
-    s.show ();
-    s.act ();
-    if (s.lives==0) {
-      mysnow.remove (m);
-    } else {
-      m++;
-    }
-  }
+//  int m=0;
+//  while (m<mysnow.size()) {
+//    snow s= mysnow.get (m);
+//    s.show ();
+//    s.act ();
+//    if (s.lives==0) {
+//      mysnow.remove (m);
+//    } else {
+//      m++;
+//    }
+//  }
 
-  int n=0;
-  while (n <8) {
-    mysnow.add (new snow (random (0, 5000), ly-1000, random (0, 5000), 0));
-    n++;
-  }
-}
+//  int n=0;
+//  while (n <8) {
+//    mysnow.add (new snow (random (0, 5000), ly-1000, random (0, 5000), 0));
+//    n++;
+//  }
+//}
 
-void rai () {
+//void rai () {
 
-  int j=0;
-  while (j<myrain.size()) {
-    rain r= myrain.get (j);
-    r.show ();
-    r.act ();
+//  int j=0;
+//  while (j<myrain.size()) {
+//    rain r= myrain.get (j);
+//    r.show ();
+//    r.act ();
 
-    if (r.lives==0) {
-      myrain.remove (j);
-    } else {
-      j++;
-    }
-  }
-  int k=0;
-  while (k <50) {
-    myrain.add (new rain (random (0, 5000), ly-1000, random (0, 5000), 0));
-    k++;
-  }
-}
+//    if (r.lives==0) {
+//      myrain.remove (j);
+//    } else {
+//      j++;
+//    }
+//  }
+//  int k=0;
+//  while (k <50) {
+//    myrain.add (new rain (random (0, 5000), ly-1000, random (0, 5000), 0));
+//    k++;
+//  }
+//}
 
 void bul() {
 
