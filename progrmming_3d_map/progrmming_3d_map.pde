@@ -8,7 +8,7 @@ color white= #FFFFFF;
 PImage qblock;
 PImage map;
 
-int shottimer=0, threshold=30;
+int shottimer=0, threshold=30; //bullet
 
 PVector direction= new PVector (0, -10);
 //direction.setMag =10;
@@ -26,8 +26,15 @@ float headangle;
 ArrayList <bullet> mybullet;
 ArrayList <rain> myrain;
 ArrayList <snow> mysnow;
+ArrayList <particle> myparticle;
 
 ArrayList <firework> myfirework;
+
+int h=3;
+int timer=0; //tree
+
+int ftimer=0;  //firework
+
 
 
 void setup () {
@@ -39,6 +46,7 @@ void setup () {
   myrain= new ArrayList <rain> (1000);
   mysnow= new ArrayList <snow> (1000);
   myfirework= new ArrayList <firework> ();
+  myparticle= new ArrayList <particle> ();
 }
 
 void draw () {
@@ -49,14 +57,14 @@ void draw () {
   headangle=(pmouseX-mouseX) *0.01;
   dirlf= direction.copy();
   dirlf.rotate (PI/2);
-  
+
   pushMatrix ();
   rotateX (PI/2);
   fill (0);
-  translate (2500, ly-50,2500);
-  ellipse (0,0,100, 100);
+  translate (2500, ly-50, 2500);
+  ellipse (0, 0, 100, 100);
   popMatrix ();
-  
+
 
 
   if (up) {
@@ -85,33 +93,46 @@ void draw () {
   drawground();
   drawmap();
   bul();
- // rai();
- // sno();
+  // rai();
+  // sno();
   firewor();
   tree();
+  particl();
 
   // popMatrix();
 }
 
 void tree () {
-pushMatrix();
-translate (500, 50, 500);
-fill (#583811);
-box (100);
-popMatrix();
+  
+  fill (#583811);
+  
+  int i=0;
+  float y=50;
+  while (i<h){
+  pushMatrix();
+  translate (500, y, 500);
+  box (100, 100, 100);
+  popMatrix();
+  y=y-100;
+  i++;
+  }
 
-pushMatrix();
-fill (#583811);
-translate (500, -50, 500);
-box (100);
-popMatrix();
+if (i==h) {
+  pushMatrix();
+  translate (500, -h*100-100, 500);
+  fill (#1E761D);
+  box (500);
+  popMatrix();
+}
 
-pushMatrix();
-translate (500, -300, 500);
-fill (#1E761D);
-box (500);
-popMatrix();
+if (h<7) {
+timer++;
+if (timer>600){
+h++;
+timer=0;
+}
 
+}
 
 }
 
@@ -121,59 +142,83 @@ void firewor() {
     firework f= myfirework.get (p);
     f.show();
     f.act ();
-if (f.lives==0) {
-myfirework.remove(p);
-}else {
-    p++;
+    if (f.lives==0) {
+      myfirework.remove(p);
+      int s=0;
+      while (s<50) {
+        myparticle.add (new particle (2500, -1000, 2500, random (-1,1), random (-1,1), random (-1, 1)));
+        s++;
+      }
+      
+    } else {
+     
+      p++;
+    }
   }
-  }
-
-  if (enter) {
+ftimer++;
+  if (enter&&ftimer>30) {
     myfirework.add (new firework (2500, ly+blocksize, 2500, 0));
+    ftimer=0;
   }
 }
 
-//void sno () {
+void particl() {
+  int r=0;
+ while (r<myparticle.size()){
+      particle ps=myparticle.get (r);
+      ps.show();
+      ps.act();
+      if (ps.lives==0) {
+      myparticle.remove (r);
+      } else {
+      r++;
+      }
+      
+      }
 
-//  int m=0;
-//  while (m<mysnow.size()) {
-//    snow s= mysnow.get (m);
-//    s.show ();
-//    s.act ();
-//    if (s.lives==0) {
-//      mysnow.remove (m);
-//    } else {
-//      m++;
-//    }
-//  }
+}
 
-//  int n=0;
-//  while (n <8) {
-//    mysnow.add (new snow (random (0, 5000), ly-1000, random (0, 5000), 0));
-//    n++;
-//  }
-//}
+void sno () {
 
-//void rai () {
+  int m=0;
+  while (m<mysnow.size()) {
+    snow s= mysnow.get (m);
+    s.show ();
+    s.act ();
+    if (s.lives==0) {
+      mysnow.remove (m);
+    } else {
+      m++;
+    }
+  }
 
-//  int j=0;
-//  while (j<myrain.size()) {
-//    rain r= myrain.get (j);
-//    r.show ();
-//    r.act ();
+  int n=0;
+  while (n <8) {
+    mysnow.add (new snow (random (0, 5000), ly-1000, random (0, 5000), 0));
+    n++;
+  }
+}
 
-//    if (r.lives==0) {
-//      myrain.remove (j);
-//    } else {
-//      j++;
-//    }
-//  }
-//  int k=0;
-//  while (k <50) {
-//    myrain.add (new rain (random (0, 5000), ly-1000, random (0, 5000), 0));
-//    k++;
-//  }
-//}
+void rai () {
+
+  int j=0;
+  while (j<myrain.size()) {
+    rain r= myrain.get (j);
+    r.show ();
+    r.act ();
+
+    if (r.lives==0) {
+      myrain.remove (j);
+    } else {
+      j++;
+    }
+  }
+  int k=0;
+  while (k <50) {
+    myrain.add (new rain (random (0, 5000), ly-1000, random (0, 5000), 0));
+    k++;
+  }
+}
 
 void bul() {
 
@@ -184,11 +229,11 @@ void bul() {
     b.show();
     b.act();
 
-if (b.lives==0) {
-mybullet.remove (i);
-} else {
-    i++;
-  }
+    if (b.lives==0) {
+      mybullet.remove (i);
+    } else {
+      i++;
+    }
   }
 
 
